@@ -1,3 +1,6 @@
+const express = require('express');
+const app = express();
+
 app.get('/share', (req, res) => {
   const { type, id } = req.query;
 
@@ -6,12 +9,18 @@ app.get('/share', (req, res) => {
   }
 
   const deepLink = `intent://import?id=${id}&type=${type}#Intent;scheme=doobi;package=com.doobilist;end`;
+  const fallbackLink = 'https://example.com/no-play-store'; // optional
 
   res.send(`
     <html>
       <head>
         <meta charset="UTF-8" />
         <title>Opening DoobiList...</title>
+        <script>
+          setTimeout(function() {
+            window.location = "${fallbackLink}";
+          }, 1500);
+        </script>
       </head>
       <body style="background-color:black; color:white; text-align:center; padding-top:50px;">
         <h2>Opening your list...</h2>
@@ -22,4 +31,9 @@ app.get('/share', (req, res) => {
       </body>
     </html>
   `);
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Redirect server running on port ${PORT}`);
 });
