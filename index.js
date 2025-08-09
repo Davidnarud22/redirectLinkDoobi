@@ -8,8 +8,33 @@ app.get('/share', (req, res) => {
     return res.status(400).send('Missing type or id');
   }
 
-  const deepLink = `com.doobilist://share?type=${type}&id=${id}`;
-  res.redirect(deepLink);
+  // Build the intent URI from the clean params
+  const deepLink = `intent://import?id=${id}&type=${type}#Intent;scheme=doobi;package=com.doobilist;end`;
+
+  // Fallback URL if the app is not installed
+  const playStoreLink = 'https://play.google.com/store/apps/details?id=com.doobilist';
+
+  // Send HTML that first tries to open app, then Play Store
+  res.send(`
+    <html>
+      <head>
+        <meta charset="UTF-8" />
+        <title>Opening DoobiList...</title>
+        <script>
+          setTimeout(function() {
+            window.location = "${playStoreLink}";
+          }, 1500);
+        </script>
+      </head>
+      <body style="background-color:black; color:white; text-align:center; padding-top:50px;">
+        <h2>Opening your list...</h2>
+        <a href="${deepLink}">Click here if it doesn't open automatically</a>
+        <script>
+          window.location = "${deepLink}";
+        </script>
+      </body>
+    </html>
+  `);
 });
 
 const PORT = process.env.PORT || 3000;
