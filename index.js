@@ -2,13 +2,9 @@ import express from 'express';
 
 const app = express();
 
-app.get('/share', (req, res) => {
-  const { deepLink } = req.query;
-  if (!deepLink) {
-    return res.status(400).send('Missing deepLink parameter');
-  }
-
-  res.redirect(deepLink);
+app.get("/share", (req, res) => {
+  const { id, type } = req.query;
+  res.redirect(`doobi://import?id=${id}&type=${type}`);
 });
 
 app.listen(3000, () => {
