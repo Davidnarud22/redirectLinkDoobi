@@ -1,8 +1,7 @@
-import express from 'express';
+const express = require('express');
 
 const app = express();
 
-// Redirect handler
 app.get("/share", (req, res) => {
   const { id, type } = req.query;
 
