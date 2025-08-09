@@ -4,7 +4,7 @@ const app = express();
 
 app.get("/share", (req, res) => {
   const { id, type } = req.query;
-
+console.log(id,type)
   if (!id || !type) {
     return res.status(400).send("Missing id or type parameter");
   }
